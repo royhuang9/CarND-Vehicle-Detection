@@ -1,4 +1,4 @@
-#Vehicle Detection
+# Vehicle Detection
 
 
 **Vehicle Detection Project**
@@ -24,9 +24,9 @@ The goals / steps of this project are the following:
 ###Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
 ---
-###Histogram of Oriented Gradients (HOG)
+### Histogram of Oriented Gradients (HOG)
 
-####1. Explain how (and identify where in your code) you extracted HOG features from the training images.
+#### 1. Explain how (and identify where in your code) you extracted HOG features from the training images.
 
 This step is calling skimage.feature.hog to extract HoG features for a channel. The code for this step is following:
 ```python
@@ -76,7 +76,7 @@ After including the bin spatital and color histogram, the accuracy can be 0.9961
 | YCrCb 	| HLS 	| 0.9924 	|
 | HSV 	| HSV 	| 0.9848 	|
 	
-####2. Explain how you settled on your final choice of HOG parameters.
+#### 2. Explain how you settled on your final choice of HOG parameters.
 
 After I determine the color space, the next step is to choose HoG parameters. I tried various combinations of parameters and compared the accuracy of SVM.  The results are following:
 
@@ -91,7 +91,7 @@ After I determine the color space, the next step is to choose HoG parameters. I 
 
 Eventually, I choose the HoG parameters of orientations=9, pixels_per_cell=(8,8) and cells_per_block=(2,2).
 
-####3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
+#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
 
 I trained a linear SVM as the following steps:
 1) Collect all vehicle and non-vehicle file in two lists name cars and notcars.
@@ -135,7 +135,7 @@ print('For these',n_predict, 'labels: ', y_test[0:n_predict])
    
 ```
 
-###Sliding Window Search
+### Sliding Window Search
 
 ####1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
 I am using the Udacity HoG sub-sampling window search. In the implementation,  the searching area of the image is defined by ((ystart, ystop), (xstart, xstop)). Then the searching image is converted to the color space for HoG features and binned spatial and color histogram features. The hog features is got for the whole searching image just once, but only the hog features in search window will be inputed into classifier.
@@ -218,7 +218,7 @@ def find_cars(img, ystart, ystop, xstart, xstop, scale, svc, X_scaler, orient, p
 
 ```
 
-####2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+#### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
 
 Ultimately I searched on four scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result. The binned color and histograms is generated in a different color space HSV. Here are some example images:
 
@@ -233,7 +233,7 @@ Ultimately I searched on four scales using YCrCb 3-channel HOG features plus spa
 Here's a [link to my video result](./project_out.mp4)
 
 
-####2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
+#### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
 I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected. 
 
@@ -280,8 +280,8 @@ def pipe_line(image):
 ```
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+#### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
 Sometimes the surface of road is identified as car. One way to fix this is to use more car and not car database to train the svm classifier, or consider other method like SSD, YOLO.
